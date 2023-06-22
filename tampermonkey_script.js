@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         ZhengFangJiaoWu
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/love98ooo/
 // @version      0.1
-// @description  Your course
-// @author       You
+// @description  正方教务系统猴油脚本，主要用于查询平时分
+// @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=njupt.edu.cn
 // @grant        none
