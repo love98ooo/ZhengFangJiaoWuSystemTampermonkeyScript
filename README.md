@@ -1,0 +1,2 @@
+# ZhengFangJiaoWuSystemTampermonkeyScript
+正方教务系统猴油脚本，主要用于查询平时分
