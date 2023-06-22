@@ -147,9 +147,9 @@
 				course.push(deleteExtraStr(gg[i][3]));
 				credits.push(deleteExtraStr(gg[i][6]));
 				gradePoints.push(deleteExtraStr(gg[i][8]));
-				totalPoints.push(deleteExtraStr(gg[i][9]));
-				ordinaryPoints.push(deleteExtraStr(gg[i][11]));
-				examPoints.push(deleteExtraStr(gg[i][13]));
+				ordinaryPoints.push(deleteExtraStr(gg[i][9]));
+				examPoints.push(deleteExtraStr(gg[i][11]));
+				totalPoints.push(deleteExtraStr(gg[i][13]));
 			}
 			/*
                 console.log("credits: ");
@@ -176,7 +176,7 @@
             tableElement.appendChild(headerRow);
 
             // Add the header cells
-            const headers = ["课程编号", "课程", "学分", "绩点", "平时分", "卷面分", "总分"];
+            const headers = ["课程编号", "课程", "学分", "绩点", "平时分", "卷面分", "总分", "期末 : 平时"];
             for (const headerText of headers) {
                 const headerCell = document.createElement('th');
                 headerCell.textContent = headerText;
@@ -228,6 +228,22 @@
                 row.appendChild(totalPointsCell);
                 totalPointsCell.style.border = '1px solid black';
                 totalPointsCell.style.padding = '4px';
+
+                const scaleCell = document.createElement("td");
+				if(!isNaN(totalPoints[i]) && !isNaN(examPoints[i]) && !isNaN(ordinaryPoints[i]) && Number(examPoints[i]) != 0 && Number(ordinaryPoints[i]) != 0){
+					if(Number(examPoints[i]) == Number(ordinaryPoints[i])){
+						scaleCell.textContent = "5:5";
+					} else {
+						let a = ((10 * Number(totalPoints[i]) - 10 * Number(ordinaryPoints[i])) / (Number(examPoints[i]) - Number(ordinaryPoints[i]))).toFixed(1);
+						scaleCell.textContent = a.toString();
+						scaleCell.textContent +=  ":" + (10 - a).toFixed(1).toString();
+					}
+				} else {
+					scaleCell.textContent = "";
+				}
+				row.appendChild(scaleCell);
+				scaleCell.style.border = "1px solid black";
+				scaleCell.style.padding = "4px";
 
                 tableElement.appendChild(row);
             }
