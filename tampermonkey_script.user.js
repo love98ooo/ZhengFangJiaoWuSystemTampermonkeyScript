@@ -5,6 +5,7 @@
 // @description  正方教务系统猴油脚本，主要用于查询平时分
 // @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
+// @match        *://vpn.njupt.edu.cn:8443/http/*/xs_main.aspx?*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=njupt.edu.cn
 // @grant        none
 // ==/UserScript==
@@ -76,92 +77,93 @@
                 return decoder.decode(bytes);
             };
 
-            var decodedStr = decodeUTF8FromBase64(a)
-            var arr0 = decodedStr.replace(/[a-zA-Z<>;&\\]/g, "").replace(/\d{20,}/g, "")
-            var arr1 = arr0.split("-")
-            var arr2 = [""]
-            arr1.map((i, index) => {
-                var j = 0;
-                for (j; j < i.length; j++) {
-                    if (isNaN(i[j])) {
-                        break;
-                    }
-                }
-                arr2[index] = i.slice(j, i.length)
-            })
-            arr2.splice(1, 3);
-            var course = [""];
-            var grade = [""];
-            var user;
-            arr2.map((item, index) => {
-                if (index) {
-                    for (var i = 0; i < item.length; i++) {
-                        if (!isNaN(item[i])) break;
-                        course[index] = item.slice(0, i - 1).toString()
-                        grade[index] = item.slice(i + 1, item.length).toString()
-                    }
-                } else user = item.slice(1, item.length - 14)
-            })
-            credits = [];
-            gradePoints = [];
-            ordinaryPoints = [];
-            examPoints = [];
-            totalPoints = [];
-            grade.map((item, index) => {
-                var arr3 = Array.from(item)
+            var text = decodeUTF8FromBase64(a);
+			var credits = [];
+			var gradePoints = [];
+			var ordinaryPoints = [];
+			var examPoints = [];
+			var totalPoints = [];
+			var course = [];
+			var courseId = [];
+			var user = "";
 
-                for (var i = 0; i < item.length; i++) {
-                    if (isNaN(item[i]) && item[i] != '.') {
-                        arr3 = arr3.slice(0, i);
-                        break;
-                    }
-                }
-                arr3 = arr3.filter(item => item !== " ");
-                var offset = 0;
-                if (arr3[1] !== ".") {
-                    offset = 2;
-                }
+			let x = [];
+			while (text.indexOf("<") !== -1) {
+				if (text.slice(text.indexOf("<") + 1).indexOf("<") === -1) {
+					break;
+				} else if (
+					text.slice(text.indexOf("<") + 1).indexOf("<") <
+					text.slice(text.indexOf("<") + 1).indexOf(">")
+				) {
+					text = text.slice(text.indexOf("<") + 1);
+				} else {
+					if (
+						text.slice(text.indexOf("<") + 1, text.indexOf(">")) !== "&nbsp;;"
+					) {
+						x.push(text.slice(text.indexOf("<") + 1, text.indexOf(">")));
+					}
+					text = text.slice(text.indexOf(">") + 1);
+				}
+			}
 
-                credits.push(arr3.slice(0, 3 - offset).join(""));
-                if (arr3[4 - offset] !== ".") {
-                    gradePoints.push("")
-                    offset += 4;
-                } else {
-                    gradePoints.push(arr3.slice(3 - offset, 7 - offset).join(""));
-                }
+			let gg = [];
 
+			for (let i = 0, now = 0; i <= x.length - 1;) {
+				if (x[i] === "Text;") {
+					if (now >= 9) {
+						if (i + 48 >= x.length) {
+							break;
+						}
+						let ng = [];
+						for (let j = i + 1; j < i + 48; j++) {
+							if (x[j] !== "Text;") {
+								x[j] = x[j].replace(" ", "").replace(";", "");
+								ng.push(x[j]);
+							}
+						}
+						gg.push(ng);
+						i += 48;
+					} else {
+						if (now <= 5) {
+							user += x[i + 1] + "  ";
+						}
+						now += 1;
+						i += 1;
+					}
+				} else {
+					i += 1;
+				}
+			}
 
-                if (arr3[7 - offset] === "1" && arr3[8 - offset] === "0" && arr3[9 - offset] === "0") {
-                    ordinaryPoints.push(arr3.slice(7 - offset, 10 - offset).join(""));
-                    offset -= 1;
-                } else {
-                    ordinaryPoints.push(arr3.slice(7 - offset, 9 - offset).join(""));
-                }
+			const deleteExtraStr = (text) => {
+				return text.replace(/&nbsp\\;/g, "").replace(" ", "");
+			};
 
-                if (arr3[9 - offset] === "1" && arr3[10 - offset] === "0" && arr3[11 - offset] === "0") {
-                    examPoints.push(arr3.slice(9 - offset, 12 - offset).join(""));
-                    offset -= 1;
-                } else {
-                    examPoints.push(arr3.slice(9 - offset, 11 - offset).join(""));
-                }
-
-                if (arr3[11 - offset] === "1" && arr3[12 - offset] === "0" && arr3[13 - offset] === "0") {
-                    totalPoints.push(arr3.slice(11 - offset, 14 - offset).join(""))
-                } else {
-                    totalPoints.push(arr3.slice(11 - offset, 13 - offset).join(""))
-                }
-            })
-            // console.log("credits: ")
-            // console.log(credits)
-            // console.log("gradePoints: ")
-            // console.log(gradePoints)
-            // console.log("ordinaryPoints: ")
-            // console.log(ordinaryPoints)
-            // console.log("examPoints: ")
-            // console.log(examPoints)
-            // console.log("totalPoints: ")
-            // console.log(totalPoints)
-            // console.log(course)
+			for (let i = 0; i < gg.length; i++) {
+				if (i !== 0 && gg[i][0] !== gg[i - 1][0]) {
+					break;
+				}
+				courseId.push(deleteExtraStr(gg[i][2]));
+				course.push(deleteExtraStr(gg[i][3]));
+				credits.push(deleteExtraStr(gg[i][6]));
+				gradePoints.push(deleteExtraStr(gg[i][8]));
+				ordinaryPoints.push(deleteExtraStr(gg[i][9]));
+				examPoints.push(deleteExtraStr(gg[i][11]));
+				totalPoints.push(deleteExtraStr(gg[i][13]));
+			}
+			/*
+                console.log("credits: ");
+                console.log(credits);
+                console.log("gradePoints: ");
+                console.log(gradePoints);
+                console.log("ordinaryPoints: ");
+                console.log(ordinaryPoints);
+                console.log("examPoints: ");
+                console.log(examPoints);
+                console.log("totalPoints: ");
+                console.log(totalPoints);
+                console.log(course);
+            */
 
             // Assign user and course information to HTML elements
             document.getElementById("userElement").textContent = user;
@@ -174,7 +176,7 @@
             tableElement.appendChild(headerRow);
 
             // Add the header cells
-            const headers = ['课程', '学分', '绩点', '平时分', '卷面分', '总分'];
+            const headers = ["课程编号", "课程", "学分", "绩点", "平时分", "卷面分", "总分", "期末 : 平时"];
             for (const headerText of headers) {
                 const headerCell = document.createElement('th');
                 headerCell.textContent = headerText;
@@ -182,8 +184,14 @@
             }
 
             // Add the data rows
-            for (var i = 1; i < grade.length; i++) {
+            for (var i = 0; i < course.length; i++) {
                 const row = document.createElement('tr');
+
+                const courseIdCell = document.createElement("td");
+				courseIdCell.textContent = courseId[i];
+				row.appendChild(courseIdCell);
+				courseIdCell.style.border = "1px solid black";
+				courseIdCell.style.padding = "4px";
 
                 const courseCell = document.createElement('td');
                 courseCell.textContent = course[i];
@@ -221,6 +229,22 @@
                 totalPointsCell.style.border = '1px solid black';
                 totalPointsCell.style.padding = '4px';
 
+                const scaleCell = document.createElement("td");
+				if(!isNaN(totalPoints[i]) && !isNaN(examPoints[i]) && !isNaN(ordinaryPoints[i]) && Number(examPoints[i]) != 0 && Number(ordinaryPoints[i]) != 0){
+					if(Number(examPoints[i]) == Number(ordinaryPoints[i])){
+						scaleCell.textContent = "5:5";
+					} else {
+						let a = ((10 * Number(totalPoints[i]) - 10 * Number(ordinaryPoints[i])) / (Number(examPoints[i]) - Number(ordinaryPoints[i]))).toFixed(1);
+						scaleCell.textContent = a.toString();
+						scaleCell.textContent +=  ":" + (10 - a).toFixed(1).toString();
+					}
+				} else {
+					scaleCell.textContent = "";
+				}
+				row.appendChild(scaleCell);
+				scaleCell.style.border = "1px solid black";
+				scaleCell.style.padding = "4px";
+
                 tableElement.appendChild(row);
             }
             tableElement.style.marginLeft = 'auto';
@@ -247,7 +271,7 @@
 
             // Add the close button to the container element
             containerElement.appendChild(closeBtn);
-            return arr2.slice(3, -1);
+            return gg;
         };
         var data = extractDataAndDisplay();
         buttonElement.addEventListener('click', () => {
