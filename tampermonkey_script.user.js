@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ZhengFangJiaoWu
 // @namespace    https://github.com/love98ooo/
-// @version      0.1.1
+// @version      0.2.0
 // @description  正方教务系统猴油脚本，主要用于查询平时分
 // @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
