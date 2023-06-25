@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ZhengFangJiaoWu
 // @namespace    https://github.com/love98ooo/
-// @version      0.3.0
+// @version      0.3.1
 // @description  正方教务系统猴油脚本，主要用于查询平时分
 // @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
@@ -54,11 +54,24 @@
             document.body.appendChild(containerElement);
             containerElement.appendChild(userElement);
             containerElement.appendChild(courseElement);
+            const remarkElement = document.createElement("div");
+            remarkElement.style.display = 'flex';
+            remarkElement.style.right = '25%';
+            remarkElement.style.top = '50%';
+            remarkElement.style.justifyContent = 'center';
+            remarkElement.style.textAlign = 'center';
+            remarkElement.textContent = "注意：“期末 : 平时”为三项成绩倒推的结果，可能不准确";
+            remarkElement.style.flex = 0.3;
+            containerElement.appendChild(remarkElement);
             const buttonElement = document.createElement("button");
-            buttonElement.style.margin = '0 auto'
-            buttonElement.style.marginBottom = '1.5rem'
+            buttonElement.style.margin = '0 auto';
+            buttonElement.style.display = 'flex';
+            buttonElement.style.flex = 0.1;
+            buttonElement.style.marginBottom = '1.5rem';
             buttonElement.style.width = '80px';
             buttonElement.style.height = '30px';
+            buttonElement.style.alignItems = 'center';
+            buttonElement.style.justifyContent = 'center';
             buttonElement.style.textAlign = 'center';
             buttonElement.textContent = '反馈Bug'
             containerElement.appendChild(buttonElement);
@@ -224,11 +237,15 @@
                     const scaleCell = document.createElement("td");
                     if (!isNaN(totalPoints[i]) && !isNaN(examPoints[i]) && !isNaN(ordinaryPoints[i]) && Number(examPoints[i]) != 0 && Number(ordinaryPoints[i]) != 0) {
                         if (Number(examPoints[i]) == Number(ordinaryPoints[i])) {
-                            scaleCell.textContent = "5:5";
+                            scaleCell.textContent = "Unknown";
                         } else {
-                            let a = ((10 * Number(totalPoints[i]) - 10 * Number(ordinaryPoints[i])) / (Number(examPoints[i]) - Number(ordinaryPoints[i]))).toFixed(1);
-                            scaleCell.textContent = a.toString();
-                            scaleCell.textContent += ":" + (10 - a).toFixed(1).toString();
+                            let a = ((10 * Number(totalPoints[i]) - 10 * Number(ordinaryPoints[i])) / (Number(examPoints[i]) - Number(ordinaryPoints[i]))).toFixed(0);
+                            if (a <= 0 || a >= 10) {
+                                scaleCell.textContent = "Unknown";
+                            } else {
+                                scaleCell.textContent = a.toString();
+                                scaleCell.textContent += ":" + (10 - a).toString();
+                            }
                         }
                     } else {
                         scaleCell.textContent = "";
