@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ZhengFangJiaoWu
 // @namespace    https://github.com/love98ooo/
-// @version      0.3.1
+// @version      0.3.2
 // @description  正方教务系统猴油脚本，主要用于查询平时分
 // @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
@@ -45,36 +45,46 @@
             userElement.style.textAlign = 'center';
             userElement.style.borderRadius = '10px 10px 0 0';
             userElement.style.paddingTop = '1rem';
+            userElement.style.paddingBottom = '0.5rem';
             userElement.style.marginBottom = '1rem';
-            courseElement.style.height = 'calc(100% - 2rem)';
+            courseElement.style.height = 'calc(120% - 2rem)';
             courseElement.style.textAlign = 'center';
             courseElement.style.display = 'flex'
             courseElement.style.padding = '1.5rem'
+            courseElement.style.paddingTop = '0px'
             courseElement.style.flex = 0;
+            courseElement.style.flexDirection = 'column'
             document.body.appendChild(containerElement);
             containerElement.appendChild(userElement);
             containerElement.appendChild(courseElement);
             const remarkElement = document.createElement("div");
-            remarkElement.style.display = 'flex';
-            remarkElement.style.right = '25%';
-            remarkElement.style.top = '50%';
-            remarkElement.style.justifyContent = 'center';
+            // remarkElement.style.display = 'flex';
+            // remarkElement.style.right = '25%';
+            // remarkElement.style.top = '50%';
+            // remarkElement.style.justifyContent = 'center';
             remarkElement.style.textAlign = 'center';
-            remarkElement.textContent = "注意：“期末 : 平时”为三项成绩倒推的结果，可能不准确";
-            remarkElement.style.flex = 0.3;
-            containerElement.appendChild(remarkElement);
+            remarkElement.textContent = "注意：“期末 : 平时”为三项成绩倒推的结果，可能不准确；确切地说，二者相差越大，结果越准确。";
+            // remarkElement.style.flex = 0.3;
+            // containerElement.appendChild(remarkElement);
             const buttonElement = document.createElement("button");
-            buttonElement.style.margin = '0 auto';
-            buttonElement.style.display = 'flex';
-            buttonElement.style.flex = 0.1;
-            buttonElement.style.marginBottom = '1.5rem';
+            const buttonContainerElement = document.createElement("div");
+            buttonContainerElement.style.display = 'flex';
+            buttonContainerElement.style.height = '40px';
+            buttonContainerElement.style.padding = '10px';
+            buttonContainerElement.style.alignItems = 'center';
+            buttonElement.style.margin = '15px auto 1.5rem';
+            // buttonElement.style.display = 'flex';
+            // buttonElement.style.flex = 0.1;
+            // buttonElement.style.marginBottom = '1.5rem';
             buttonElement.style.width = '80px';
             buttonElement.style.height = '30px';
-            buttonElement.style.alignItems = 'center';
-            buttonElement.style.justifyContent = 'center';
-            buttonElement.style.textAlign = 'center';
-            buttonElement.textContent = '反馈Bug'
-            containerElement.appendChild(buttonElement);
+            // buttonElement.style.alignItems = 'center';
+            // buttonElement.style.justifyContent = 'center';
+            // buttonElement.style.textAlign = 'center';
+            buttonElement.style.paddingRight = '0px';
+            buttonElement.textContent = '反馈Bug';
+            buttonContainerElement.appendChild(buttonElement);
+            containerElement.appendChild(buttonContainerElement);
 
             const extractDataAndDisplay = () => {
                 var a = document.getElementById("iframeautoheight").contentDocument.Form1.childNodes[1].value;
@@ -258,6 +268,7 @@
                 }
                 // Add the table element to the page
                 document.getElementById("courseElement").appendChild(tableElement);
+                document.getElementById("courseElement").appendChild(remarkElement);
 
                 // Get the container element
                 const containerElement = document.getElementById('containerElement');
