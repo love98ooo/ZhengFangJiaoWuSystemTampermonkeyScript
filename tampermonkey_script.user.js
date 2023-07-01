@@ -319,8 +319,7 @@
                 window.open('https://github.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/issues', '_blank');
             })
         }
-        let breadcrumb = document.getElementById("dqwz").textContent
-        console.log(breadcrumb)
+        let breadcrumb = document.getElementById("dqwz").textContent;
         if (breadcrumb === "成绩查询") {
             let select = mainFrame.contentDocument.querySelector('#divcxtj > div:nth-child(3) > p.search_con');
             mainFrame.contentDocument.getElementsByClassName('toolbox')[0].style.backgroundSize = 'cover'
