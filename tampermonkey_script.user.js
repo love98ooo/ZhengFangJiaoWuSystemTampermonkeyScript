@@ -1,23 +1,38 @@
 // ==UserScript==
 // @name         ZhengFangJiaoWu
 // @namespace    https://github.com/love98ooo/
-// @version      0.3.2
+// @version      0.3.3
 // @description  正方教务系统猴油脚本，主要用于查询平时分
 // @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
-// @match        *://vpn.njupt.edu.cn:8443/http/*/xs_main.aspx?*
+// @match        *://vpn.njupt.edu.cn:8443/http/webvpn5e607416b84322620fcfebad55f2c381efb3e3d8de97685feb46fd2e866a8ae9/xs_main.aspx?*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=njupt.edu.cn
 // @grant        none
 // ==/UserScript==
 
 (function () {
     const mainFrame = document.getElementById("iframeautoheight");
+    let location = mainFrame.contentWindow.location.toString();
+    const url = window.location.href;
+    const splitUrl = url.split('/')[2];
+    let baseUrl = ""
+    console.log(url);
+    switch(splitUrl) {
+        case "vpn.njupt.edu.cn:8443":
+            baseUrl = "https://vpn.njupt.edu.cn:8443/http/webvpn5e607416b84322620fcfebad55f2c381efb3e3d8de97685feb46fd2e866a8ae9/";
+            break;
+        case "jwxt.njupt.edu.cn":
+            baseUrl = "http://jwxt.njupt.edu.cn/";
+            break;
+        default:
+            break;
+    }
     mainFrame.onload = () => {
         const floatingButton2 = document.createElement('div');
         const floatingButton = document.createElement('button');
         floatingButton.textContent = '查询考试详细分数';
         floatingButton.className = 'button'
-        const clickAction = () => {
+        const clickAction = () => { 
             const containerElement = document.createElement("div");
             const userElement = document.createElement("div");
             const courseElement = document.createElement("div");
@@ -40,7 +55,7 @@
             containerElement.style.justifyContent = 'space-between'
             containerElement.style.flexDirection = 'column';
             userElement.style.height = '2rem';
-            userElement.style.background = 'url(http://jwxt.njupt.edu.cn/style/standard/images/toolbox_right.gif) no-repeat right top'
+            userElement.style.background = 'url(' + baseUrl + 'style/standard/images/toolbox_right.gif) no-repeat right top'
             userElement.style.backgroundSize = 'cover'
             userElement.style.textAlign = 'center';
             userElement.style.borderRadius = '10px 10px 0 0';
@@ -304,8 +319,9 @@
                 window.open('https://github.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/issues', '_blank');
             })
         }
-        const url = mainFrame.contentWindow.location.href;
-        if (url.split('?')[0] === "http://jwxt.njupt.edu.cn/xscj_gc.aspx") {
+        let breadcrumb = document.getElementById("dqwz").textContent
+        console.log(breadcrumb)
+        if (breadcrumb === "成绩查询") {
             let select = mainFrame.contentDocument.querySelector('#divcxtj > div:nth-child(3) > p.search_con');
             mainFrame.contentDocument.getElementsByClassName('toolbox')[0].style.backgroundSize = 'cover'
             floatingButton.onclick = clickAction
