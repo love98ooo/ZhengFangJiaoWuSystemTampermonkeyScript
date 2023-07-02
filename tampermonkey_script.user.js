@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ZhengFangJiaoWu
 // @namespace    https://github.com/love98ooo/
-// @version      0.3.3
+// @version      0.3.4
 // @description  正方教务系统猴油脚本，主要用于查询平时分
 // @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
@@ -32,7 +32,7 @@
         const floatingButton = document.createElement('button');
         floatingButton.textContent = '查询考试详细分数';
         floatingButton.className = 'button'
-        const clickAction = () => { 
+        const clickAction = () => {
             const containerElement = document.createElement("div");
             const userElement = document.createElement("div");
             const courseElement = document.createElement("div");
@@ -316,7 +316,14 @@
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
                 alert("已复制相关数据至剪贴板，请在GitHub中提Issues\n注意：可能包含个人信息数据，如有需要请自行在粘贴出来的文本中删除个人信息");
-                window.open('https://github.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/issues', '_blank');
+                let a = document.createElement("a");
+                a.setAttribute("href", 'https://github.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/issues');
+                a.setAttribute("target", "_blank");
+                a.setAttribute("id", 'githubIssues');
+                if(!document.getElementById('githubIssues')) {
+                    document.body.appendChild(a);
+                }
+                a.click();
             })
         }
         let breadcrumb = document.getElementById("dqwz").textContent;
