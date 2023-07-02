@@ -4,11 +4,13 @@
 
 南京邮电大学正方教务系统油猴脚本，主要用于查询平时分和卷面分（看看老师捞没捞😭
 
-🥰=> [点这里安装或手动更新脚本](https://raw.githubusercontent.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/master/tampermonkey_script.user.js)
+🥰 点这里安装或手动更新脚本 => [Origin](https://raw.githubusercontent.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/master/tampermonkey_script.user.js) · [Gcore Mirror](https://gcore.jsdelivr.net/gh/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript@master/tampermonkey_script.user.js) · [CF Mirror](https://testingcf.jsdelivr.net/gh/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript@master/tampermonkey_script.user.js) · [GH-proxy Mirror](https://gh.api.99988866.xyz/https://raw.githubusercontent.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/master/tampermonkey_script.user.js)
 
-如果你还没有安装过油猴插件，可以在下面的安装链接中找到你需要的，安装载体插件后再安装本脚本。
+注意，Mirror安装的版本可能会比Origin安装的版本慢一天。
 
-⚠️目前处于测试阶段，测试样例非常少，所有肯定有很多Bug，非常欢迎提交Issues，记得带上你的数据。
+🐵 如果你还没有安装过油猴插件，可以在下面的安装链接中找到你需要的，安装载体插件后再安装本脚本。
+
+⚠️ 目前处于测试阶段，测试样例非常少，所有肯定有很多Bug，非常欢迎提交Issues，记得带上你的数据。
 
 ## 关于脚本载体
 
