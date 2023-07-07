@@ -177,9 +177,10 @@
                 };
 
                 for (let i = 0; i < gg.length; i++) {
-                    if (i !== 0 && gg[i][0] !== gg[i - 1][0]) {
-                        break;
-                    }
+                    const pattern = /^\d{4}-\d{4}$/;
+					if(!pattern.test(gg[i][0])) {
+						continue;
+					}
                     courseId.push(deleteExtraStr(gg[i][2]));
                     course.push(deleteExtraStr(gg[i][3]));
                     credits.push(deleteExtraStr(gg[i][6]));
