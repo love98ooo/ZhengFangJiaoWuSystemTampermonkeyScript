@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ZhengFangJiaoWu
 // @namespace    https://github.com/love98ooo/
-// @version      0.3.5
+// @version      0.3.6
 // @description  正方教务系统猴油脚本，主要用于查询平时分
 // @author       Love98
 // @match        http://jwxt.njupt.edu.cn/xs_main.aspx?*
@@ -14,12 +14,13 @@
     const mainFrame = document.getElementById("iframeautoheight");
     let location = mainFrame.contentWindow.location.toString();
     const url = window.location.href;
-    const splitUrl = url.split('/')[2];
-    let baseUrl = ""
-    console.log(url);
-    switch(splitUrl) {
+    const splitUrl = url.split("/")[2];
+    let baseUrl = "";
+    // console.log(url);
+    switch (splitUrl) {
         case "vpn.njupt.edu.cn:8443":
-            baseUrl = "https://vpn.njupt.edu.cn:8443/http/webvpn5e607416b84322620fcfebad55f2c381efb3e3d8de97685feb46fd2e866a8ae9/";
+            baseUrl =
+                "https://vpn.njupt.edu.cn:8443/http/webvpn5e607416b84322620fcfebad55f2c381efb3e3d8de97685feb46fd2e866a8ae9/";
             break;
         case "jwxt.njupt.edu.cn":
             baseUrl = "http://jwxt.njupt.edu.cn/";
@@ -28,81 +29,70 @@
             break;
     }
     mainFrame.onload = () => {
-        const floatingButton2 = document.createElement('div');
-        const floatingButton = document.createElement('button');
-        floatingButton.textContent = '查询考试详细分数';
-        floatingButton.className = 'button'
+        const floatingButton2 = document.createElement("div");
+        const floatingButton = document.createElement("button");
+        floatingButton.textContent = "查询考试详细分数";
+        floatingButton.className = "button";
+
+        // 创建 style 节点用于存储样式表
+        const extralstyle = document.createElement("style");
+        extralstyle.className = "extralstyle";
+        extralstyle.appendChild(document.createTextNode(getStyle()));
+        if (!document.querySelector("style.extralstyle"))
+            document.head.appendChild(extralstyle);
+
+        // 整体容器
+        const containerElement = document.createElement("div");
+        containerElement.className = "extralbox";
+
+        // 展示个人信息的部分
+        const userElement = document.createElement("div");
+        userElement.className = "extralbox-header";
+        userElement.style.background =
+            "url(" +
+            baseUrl +
+            "style/standard/images/toolbox_right.gif) no-repeat right top";
+
+        // 展示成绩的部分
+        const courseElement = document.createElement("header");
+        courseElement.className = "extralbox-main";
+        containerElement.appendChild(userElement);
+        containerElement.appendChild(courseElement);
+
+        // Create the close button
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "button--close";
+        closeBtn.textContent = "×";
+        // Add the close button to the container element
+        userElement.appendChild(closeBtn);
+        const remarkElement = document.createElement("div");
+
+        remarkElement.style.textAlign = "center";
+        remarkElement.textContent =
+            "注意：“期末 : 平时”为三项成绩倒推的结果，可能不准确；确切地说，二者相差越大，结果越准确。";
+
+        const buttonContainerElement = document.createElement("footer");
+        buttonContainerElement.className = "extralbox-footer";
+
+        const buttonElement = document.createElement("button");
+        buttonElement.className = "extralbox-footer-button";
+        buttonElement.textContent = "反馈Bug";
+
+        buttonContainerElement.appendChild(buttonElement);
+        containerElement.appendChild(buttonContainerElement);
+
         const clickAction = () => {
-            const containerElement = document.createElement("div");
-            const userElement = document.createElement("div");
-            const courseElement = document.createElement("div");
-            containerElement.style.position = 'fixed';
-            containerElement.style.right = '25%';
-            containerElement.style.top = '50%';
-            containerElement.style.transform = 'translateY(-50%)';
-            containerElement.style.outline = '1px solid #8AA4C4'
-            containerElement.style.border = '1px solid #fff !important'
-            containerElement.style.borderRadius = '10px'
-            containerElement.style.width = '924px';
-            containerElement.style.height = '75%';
-            containerElement.style.overflowY = 'scroll';
-            containerElement.style.zIndex = 9999;
-            containerElement.style.backgroundColor = "white";
-            containerElement.id = "containerElement";
-            userElement.id = "userElement";
-            courseElement.id = "courseElement";
-            containerElement.style.display = 'flex';
-            containerElement.style.justifyContent = 'space-between'
-            containerElement.style.flexDirection = 'column';
-            userElement.style.height = '2rem';
-            userElement.style.background = 'url(' + baseUrl + 'style/standard/images/toolbox_right.gif) no-repeat right top'
-            userElement.style.backgroundSize = 'cover'
-            userElement.style.textAlign = 'center';
-            userElement.style.borderRadius = '10px 10px 0 0';
-            userElement.style.paddingTop = '1rem';
-            userElement.style.paddingBottom = '0.5rem';
-            userElement.style.marginBottom = '1rem';
-            courseElement.style.height = 'calc(120% - 2rem)';
-            courseElement.style.textAlign = 'center';
-            courseElement.style.display = 'flex'
-            courseElement.style.padding = '1.5rem'
-            courseElement.style.paddingTop = '0px'
-            courseElement.style.flex = 0;
-            courseElement.style.flexDirection = 'column'
+            // 若点击时已存在面板，则移除
+            if (document.querySelector(".extralbox")) {
+                document.querySelector(".extralbox").remove();
+            }
+
             document.body.appendChild(containerElement);
-            containerElement.appendChild(userElement);
-            containerElement.appendChild(courseElement);
-            const remarkElement = document.createElement("div");
-            // remarkElement.style.display = 'flex';
-            // remarkElement.style.right = '25%';
-            // remarkElement.style.top = '50%';
-            // remarkElement.style.justifyContent = 'center';
-            remarkElement.style.textAlign = 'center';
-            remarkElement.textContent = "注意：“期末 : 平时”为三项成绩倒推的结果，可能不准确；确切地说，二者相差越大，结果越准确。";
-            // remarkElement.style.flex = 0.3;
-            // containerElement.appendChild(remarkElement);
-            const buttonElement = document.createElement("button");
-            const buttonContainerElement = document.createElement("div");
-            buttonContainerElement.style.display = 'flex';
-            buttonContainerElement.style.height = '40px';
-            buttonContainerElement.style.padding = '10px';
-            buttonContainerElement.style.alignItems = 'center';
-            buttonElement.style.margin = '15px auto 1.5rem';
-            // buttonElement.style.display = 'flex';
-            // buttonElement.style.flex = 0.1;
-            // buttonElement.style.marginBottom = '1.5rem';
-            buttonElement.style.width = '80px';
-            buttonElement.style.height = '30px';
-            // buttonElement.style.alignItems = 'center';
-            // buttonElement.style.justifyContent = 'center';
-            // buttonElement.style.textAlign = 'center';
-            buttonElement.style.paddingRight = '0px';
-            buttonElement.textContent = '反馈Bug';
-            buttonContainerElement.appendChild(buttonElement);
-            containerElement.appendChild(buttonContainerElement);
 
             const extractDataAndDisplay = () => {
-                var a = document.getElementById("iframeautoheight").contentDocument.Form1.childNodes[1].value;
+                var a =
+                    document.getElementById("iframeautoheight").contentDocument.Form1
+                        .childNodes[1].value;
                 const decodeUTF8FromBase64 = (base64) => {
                     const text = atob(base64);
                     const length = text.length;
@@ -178,9 +168,9 @@
 
                 for (let i = 0; i < gg.length; i++) {
                     const pattern = /^\d{4}-\d{4}$/;
-					if(!pattern.test(gg[i][0])) {
-						continue;
-					}
+                    if (!pattern.test(gg[i][0])) {
+                        continue;
+                    }
                     courseId.push(deleteExtraStr(gg[i][2]));
                     course.push(deleteExtraStr(gg[i][3]));
                     credits.push(deleteExtraStr(gg[i][6]));
@@ -191,81 +181,93 @@
                 }
 
                 // Assign user and course information to HTML elements
-                document.getElementById("userElement").textContent = user;
+                document
+                    .querySelector(".extralbox-header")
+                    .appendChild(document.createTextNode(user));
 
                 // Create the table element
-                const tableElement = document.createElement('table');
-                const tbodyElement = document.createElement('tbody')
-                tableElement.appendChild(tbodyElement)
-                tableElement.style.width = '100%'
-                tableElement.className = 'datelist'
+                const tableElement = document.createElement("table");
+                const tbodyElement = document.createElement("tbody");
+                tableElement.appendChild(tbodyElement);
+
+                tableElement.className = "datelist";
 
                 // Add the header row
-                const headerRow = document.createElement('tr');
-                headerRow.className = 'datelisthead'
+                const headerRow = document.createElement("tr");
+                headerRow.className = "datelisthead";
                 tbodyElement.appendChild(headerRow);
 
                 // Add the header cells
-                const headers = ["课程编号", "课程", "学分", "绩点", "平时分", "卷面分", "总分", "期末 : 平时"];
+                const headers = [
+                    "课程编号",
+                    "课程",
+                    "学分",
+                    "绩点",
+                    "平时分",
+                    "卷面分",
+                    "总分",
+                    "期末 : 平时",
+                ];
                 for (const headerText of headers) {
-                    const headerCell = document.createElement('td');
+                    const headerCell = document.createElement("td");
                     headerCell.textContent = headerText;
-                    headerCell.style.height = "20px";
                     headerRow.appendChild(headerCell);
                 }
 
                 // Add the data rows
                 for (var i = 0; i < course.length; i++) {
-                    const row = document.createElement('tr');
-
+                    const row = document.createElement("tr");
+                    row.className = "table-row";
                     const courseIdCell = document.createElement("td");
                     courseIdCell.textContent = courseId[i];
                     row.appendChild(courseIdCell);
                     // courseIdCell.style.border = "1px solid black";
-                    courseIdCell.style.height = "20px";
 
-                    const courseCell = document.createElement('td');
+                    const courseCell = document.createElement("td");
                     courseCell.textContent = course[i];
                     row.appendChild(courseCell);
                     // courseCell.style.border = '1px solid black';
-                    courseCell.style.height = "20px";
 
-                    const creditsCell = document.createElement('td');
+                    const creditsCell = document.createElement("td");
                     creditsCell.textContent = credits[i];
                     row.appendChild(creditsCell);
                     // creditsCell.style.border = '1px solid black';
-                    creditsCell.style.height = "20px";
 
-                    const gradePointsCell = document.createElement('td');
+                    const gradePointsCell = document.createElement("td");
                     gradePointsCell.textContent = gradePoints[i];
                     row.appendChild(gradePointsCell);
                     // gradePointsCell.style.border = '1px solid black';
-                    gradePointsCell.style.height = "20px";
 
-                    const ordinaryPointsCell = document.createElement('td');
+                    const ordinaryPointsCell = document.createElement("td");
                     ordinaryPointsCell.textContent = ordinaryPoints[i];
                     row.appendChild(ordinaryPointsCell);
                     // ordinaryPointsCell.style.border = '1px solid black';
-                    ordinaryPointsCell.style.height = "20px";
 
-                    const examPointsCell = document.createElement('td');
+                    const examPointsCell = document.createElement("td");
                     examPointsCell.textContent = examPoints[i];
                     row.appendChild(examPointsCell);
                     // examPointsCell.style.border = '1px solid black';
-                    examPointsCell.style.height = "20px";
 
-                    const totalPointsCell = document.createElement('td');
+                    const totalPointsCell = document.createElement("td");
                     totalPointsCell.textContent = totalPoints[i];
                     row.appendChild(totalPointsCell);
                     // totalPointsCell.style.border = '1px solid black';
-                    totalPointsCell.style.height = "20px";
 
                     const scaleCell = document.createElement("td");
-                    if (!isNaN(totalPoints[i]) && !isNaN(examPoints[i]) && !isNaN(ordinaryPoints[i]) && Number(examPoints[i]) != 0 && Number(ordinaryPoints[i]) != 0) {
+                    if (
+                        !isNaN(totalPoints[i]) &&
+                        !isNaN(examPoints[i]) &&
+                        !isNaN(ordinaryPoints[i]) &&
+                        Number(examPoints[i]) != 0 &&
+                        Number(ordinaryPoints[i]) != 0
+                    ) {
                         if (Number(examPoints[i]) == Number(ordinaryPoints[i])) {
                             scaleCell.textContent = "Unknown";
                         } else {
-                            let a = ((10 * Number(totalPoints[i]) - 10 * Number(ordinaryPoints[i])) / (Number(examPoints[i]) - Number(ordinaryPoints[i]))).toFixed(0);
+                            let a = (
+                                (10 * Number(totalPoints[i]) - 10 * Number(ordinaryPoints[i])) /
+                                (Number(examPoints[i]) - Number(ordinaryPoints[i]))
+                            ).toFixed(0);
                             if (a <= 0 || a >= 10) {
                                 scaleCell.textContent = "Unknown";
                             } else {
@@ -283,56 +285,143 @@
                     tbodyElement.appendChild(row);
                 }
                 // Add the table element to the page
-                document.getElementById("courseElement").appendChild(tableElement);
-                document.getElementById("courseElement").appendChild(remarkElement);
+                document.querySelector(".extralbox-main").appendChild(tableElement);
+                document.querySelector(".extralbox-main").appendChild(remarkElement);
 
                 // Get the container element
-                const containerElement = document.getElementById('containerElement');
-
-                // Create the close button
-                const closeBtn = document.createElement('span');
-                closeBtn.textContent = '×';
-                closeBtn.style.fontSize = "x-large"
-                closeBtn.style.position = 'absolute';
-                closeBtn.style.top = '2px';
-                closeBtn.style.right = '20px';
-                closeBtn.style.cursor = 'pointer';
+                const containerElement = document.querySelector(".extralbox");
 
                 // Add the event listener
-                closeBtn.addEventListener('click', () => {
+                closeBtn.addEventListener("click", () => {
                     containerElement.remove();
                 });
 
-                // Add the close button to the container element
-                containerElement.appendChild(closeBtn);
                 return gg;
             };
             var data = extractDataAndDisplay();
-            buttonElement.addEventListener('click', () => {
+            buttonElement.addEventListener("click", () => {
                 var str = "['" + data.join("', '") + "']";
                 var textArea = document.createElement("textarea");
                 textArea.value = str;
                 document.body.appendChild(textArea);
                 textArea.select();
-                document.execCommand('copy');
+                document.execCommand("copy");
                 document.body.removeChild(textArea);
-                alert("已复制相关数据至剪贴板，请在GitHub中提Issues\n注意：可能包含个人信息数据，如有需要请自行在粘贴出来的文本中删除个人信息");
+                alert(
+                    "已复制相关数据至剪贴板，请在GitHub中提Issues\n注意：可能包含个人信息数据，如有需要请自行在粘贴出来的文本中删除个人信息"
+                );
                 let a = document.createElement("a");
-                a.setAttribute("href", 'https://github.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/issues');
+                a.setAttribute(
+                    "href",
+                    "https://github.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/issues"
+                );
                 a.setAttribute("target", "_blank");
-                a.setAttribute("id", 'githubIssues');
-                if(!document.getElementById('githubIssues')) {
+                a.setAttribute("id", "githubIssues");
+                if (!document.getElementById("githubIssues")) {
                     document.body.appendChild(a);
                 }
                 a.click();
-            })
-        }
+            });
+        };
         let breadcrumb = document.getElementById("dqwz").textContent;
         if (breadcrumb === "成绩查询") {
-            let select = mainFrame.contentDocument.querySelector('#divcxtj > div:nth-child(3) > p.search_con');
-            mainFrame.contentDocument.getElementsByClassName('toolbox')[0].style.backgroundSize = 'cover'
-            floatingButton.onclick = clickAction
-            select.appendChild(floatingButton)
+            let select = mainFrame.contentDocument.querySelector(
+                "#divcxtj > div:nth-child(3) > p.search_con"
+            );
+            mainFrame.contentDocument.getElementsByClassName(
+                "toolbox"
+            )[0].style.backgroundSize = "cover";
+            floatingButton.onclick = clickAction;
+            select.appendChild(floatingButton);
         }
-    }
+    };
 })();
+
+function getStyle() {
+    return `.extralbox {
+    position: fixed;
+    top: 180px;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 99999;
+
+    width: 924px;
+    height: fit-content;
+    max-height: min(75%, 100vh - 240px );
+    border: 1px solid #fff;
+    border-radius: 10px;
+    outline: 1px solid #8aa4c4;
+
+    overflow-y: auto;
+
+    background-color: white;
+
+    transform: translateX(-50%);
+  }
+
+  .extralbox::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+  }
+
+  .extralbox::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .extralbox::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .extralbox-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: none;
+    height: 2rem;
+    background-size: cover;
+    border-radius: 10px 0;
+    margin: 0 0 1rem;
+  }
+
+  .extralbox-main {
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    height: calc(120% - 2rem);
+    padding: 0 15px 15px;
+    text-align: center;
+  }
+
+  .extralbox-footer {
+    display: flex;
+    justify-content: center;
+    height: 40px;
+    padding: 10px;
+  }
+
+  .datelist {
+    width: 100%;
+  }
+
+  .table-row td,
+  .datelisthead td {
+    height: 20px;
+  }
+
+  .table-row td:hover,
+  .datelisthead td:hover {
+    padding: 0.2em 0.5em;
+  }
+
+  .button--close {
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+    font-size: medium;
+  }
+  `;
+}
