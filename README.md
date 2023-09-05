@@ -1,5 +1,12 @@
 # ZhengFangJiaoWuSystemTampermonkeyScript
 
+## ⚠️脚本失效
+ 
+![image](https://github.com/love98ooo/ZhengFangJiaoWuSystemTampermonkeyScript/assets/77888749/ebe9d883-cdc7-4e02-b2f8-1b11812a4622)
+
+更新后的正方教务系统返回的数据包不包含平时分和卷面分，脚本暂时失效
+
+
 ## 关于这个项目
 
 南京邮电大学正方教务系统油猴脚本，主要用于查询平时分和卷面分（看看老师捞没捞😭
